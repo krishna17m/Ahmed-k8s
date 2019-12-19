@@ -1,0 +1,42 @@
+
+Valaxy project :-
+
+1) we need three servers jenkins, ansible -ec2, k8s- Ubuntu
+
+2) Jenkins :- git,maven,java1-8, Jenkins, plugins :- publish to ssh , github, maven, with-credentails (if using pipeline)
+
+3)Ansible (EC2) server  :- DOCKER and Ansible  User:-ansadmin with passwd ansibleadmin  
+
+in this server , we have to add ansadmin in visudo with ALL access same as root
+ and also enable Permit passwd authentincation to yes in /etc/ssh/sshd_config and run server sshd reload ---VVVIP donot restart just reload
+
+4) Jenkins server:- In jenkins system configuration drop downto "publish over ssh" add ansible server's ansadmin user with passwd and host
+
+test and save
+
+5) k8s server:- install k8s with github yankil's and Javahome k8s
+
+then passwdless communication setting
+
+In ansible using ansadmin user generate a new key and add this public key to root user of k8s server
+
+6) in k8s server root user home location mein :- valaxy-deployment.yaml and valaxy-service.yaml
+
+7) In ansible server create a new folder in /opt/kubernetes  with -R ansadmin:ansadmin permission
+
+7 a) In Ansible server /opt/kubernetes location we need to have 4  files:-
+
+1)Dockerfile 2) create_simpleDevopsImage 3)K8s_Krishna_Deployment  4)k8s-Krishna-Service
+
+8)From  Jenkins to ansible server connected via passwd using ansadmin user over the publish-to-ssh plugin.
+
+9)From Ansible  server ansadmin user we made a passwdless communication to k8s server
+
+10) Main CI/CD
+
+we have written two Jenkins job's 1) continous integration which checkout build dockerised (building image of docker for war file) and push to docker hub,
+
+2) Continous deployment :- Taking image from docker HUB and using k8s-deployment.yaml  and service.yaml files deploy into k8s cluster.
+
+
+
