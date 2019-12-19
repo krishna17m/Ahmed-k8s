@@ -1,0 +1,20 @@
+FIRST TIME WHEN WE CREATE CLUSTER WE NEED TO RUN ALL BELOW STEPS:-
+POINTS TO BE note is 1) add private in dns ,see the region and add the vpc accordingly
+in which region the k8s managing  server and kubernetes cluster i.e master node should be in same region
+
+
+bucket_name=ahmed17m.tk
+aws s3 mb s3://${bucket_name} --region us-east-1
+
+AFTER BRINGING UP CLUSTER NODE RUNTHIS 
+bucket_name=ahmed17m.tk
+export KOPS_CLUSTER_NAME=ahmed17m.tk
+export KOPS_STATE_STORE=s3://${bucket_name}
+
+kops create cluster --state=${KOPS_STATE_STORE} --node-count=1 --master-count=1 --node-size=t2.micro --master-size=t2.micro --name=${KOPS_CLUSTER_NAME} --zones=ap-south-1a,ap-south-1b --dns private
+
+kops update cluster --name=${KOPS_CLUSTER_NAME} --state=${KOPS_STATE_STORE} --yes
+
+kops validate cluster --name=${KOPS_CLUSTER_NAME} --state=${KOPS_STATE_STORE}
+
+kops delete cluster --name=${KOPS_CLUSTER_NAME} --state=${KOPS_STATE_STORE} --yes
